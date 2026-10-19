@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>tiny-transformer - a GPT you can read</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <h1>tiny-transformer</h1>
+  <p class="sub">a GPT-style transformer with every layer hand-written - trained on 1,682 real movie titles</p>
+</header>
+
+<section class="controls">
+  <label>seed text <input id="seed" placeholder="(optional) e.g. The"></label>
+  <label>temperature <b id="temp-val">0.9</b>
+    <input id="temp" type="range" min="0.2" max="1.5" step="0.05" value="0.9"></label>
+  <button id="go">Generate a movie title</button>
+</section>
+
+<section class="output">
+  <h2>Generated title</h2>
+  <div id="result" class="result quiet">press the button</div>
+</section>
+
+<section class="attention">
+  <h2>What the model looked at <span class="hint">mean attention per layer, darker = more attention</span></h2>
+  <div class="maps">
+    <div><h3>Layer 1</h3><canvas id="map0" width="360" height="360"></canvas></div>
+    <div><h3>Layer 2</h3><canvas id="map1" width="360" height="360"></canvas></div>
+  </div>
+  <div id="seq-label" class="hint"></div>
+</section>
+<script src="/static/app.js"></script>
+</body>
+</html>

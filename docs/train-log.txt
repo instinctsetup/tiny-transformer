@@ -1,0 +1,9 @@
+params: 113,488 | vocab: 80
+step    0  train 4.554  val 4.510
+step  500  train 2.530  val 2.612
+step 1000  train 2.339  val 2.515
+step 1500  train 2.257  val 2.415
+step 2000  train 2.076  val 2.409
+step 2499  train 2.007  val 2.331
+sample (T=0.8): '\nBlowen to the Wall\n'
+sample (T=1.0): '\nHepers\n'
