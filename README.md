@@ -2,6 +2,10 @@
 
 **A GPT-style transformer with every layer hand-written - trained on 1,682 real movie titles, generating new ones in the browser with a live attention heatmap.**
 
+- **Demo video**: https://drive.google.com/file/d/1kQ1AVViySFOTVm9tbWrDeAgUoHJUIsi4/view
+- **Project report (PDF)**: https://drive.google.com/file/d/1nTvdUFR6VuHnrrD1J64SKYY3A8ZztyDd/view
+
+
 Most "I built a transformer" projects call `nn.Transformer`. This one implements multi-head causal self-attention, layer norm, positional embeddings and the residual stack directly on tensors (PyTorch is used for tensors + autograd only). Everything is character-level and small enough (~130k parameters) to read in one sitting and train on a laptop CPU in minutes.
 
 ## What you can do with it
