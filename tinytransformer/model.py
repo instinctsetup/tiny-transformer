@@ -120,6 +120,6 @@ class TinyGPT(nn.Module):
                 logits[logits < v[:, [-1]]] = float("-inf")
             probs = F.softmax(logits, dim=-1)
             idx = torch.cat([idx, torch.multinomial(probs, 1)], dim=1)
-            if idx[0, -1].item() == 0:               # newline = end of title
+            if (idx[:, -1] == 0).all():              # stop when every row hit newline (EOS)
                 break
         return idx

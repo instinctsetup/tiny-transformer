@@ -5,7 +5,7 @@ Run:  uvicorn server:app --port 8000    then open http://localhost:8000
 from pathlib import Path
 
 import torch
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -17,7 +17,7 @@ app = FastAPI(title="tiny-transformer")
 FRONTEND = Path(__file__).parent / "frontend"
 
 ckpt = torch.load(Path(__file__).parent / "tinytransformer" / "tinygpt.pt",
-                  map_location="cpu", weights_only=False)
+                  map_location="cpu", weights_only=False)  # safe only because tinygpt.pt is committed/trusted; revisit before making the path configurable
 MODEL = TinyGPT(**ckpt["config"])
 MODEL.load_state_dict(ckpt["model"])
 MODEL.eval()
@@ -42,7 +42,10 @@ def generate(req: GenerateRequest):
     """Generate a title, and return the attention maps over the final sequence
     so the frontend can paint what the model 'looked at'."""
     prompt = "\n" + req.seed if req.seed else "\n"
-    ids = torch.tensor([VOCAB.encode(prompt)], dtype=torch.long)
+    try:
+        ids = torch.tensor([VOCAB.encode(prompt)], dtype=torch.long)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     out = MODEL.generate(ids, req.max_chars, temperature=req.temperature, top_k=req.top_k)
     text = VOCAB.decode(out[0].tolist())
 

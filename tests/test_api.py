@@ -19,3 +19,11 @@ def test_health_and_generate():
     assert len(data["attention"]) == 2
     T = len(data["attention"][0])
     assert T <= 48 and len(data["sequence"]) == T
+
+
+def test_generate_rejects_unknown_chars():
+    from fastapi.testclient import TestClient
+    from server import app
+    c = TestClient(app)
+    r = c.post("/api/generate", json={"seed": "中文", "temperature": 0.8})
+    assert r.status_code == 400

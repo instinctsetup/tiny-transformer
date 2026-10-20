@@ -15,7 +15,10 @@ class CharVocab:
         return len(self.stoi)
 
     def encode(self, s: str) -> list[int]:
-        return [self.stoi[ch] for ch in s]
+        try:
+            return [self.stoi[ch] for ch in s]
+        except KeyError as e:
+            raise ValueError(f"character {e.args[0]!r} is not in the vocabulary") from e
 
     def decode(self, ids) -> str:
         return "".join(self.itos[int(i)] for i in ids)
@@ -42,7 +45,11 @@ def load_corpus(path="data/movie_titles.txt"):
 
 def get_batch(data: torch.Tensor, block_size: int, batch_size: int):
     """Random windows: input is data[i:i+T], target is the same shifted by 1."""
-    ix = torch.randint(len(data) - block_size - 1, (batch_size,))
+    n_positions = len(data) - block_size - 1
+    if n_positions <= 0:
+        raise ValueError(
+            f"corpus too small ({len(data)} tokens) for block_size={block_size}")
+    ix = torch.randint(n_positions, (batch_size,))
     x = torch.stack([data[i:i + block_size] for i in ix])
     y = torch.stack([data[i + 1:i + block_size + 1] for i in ix])
     return x, y
